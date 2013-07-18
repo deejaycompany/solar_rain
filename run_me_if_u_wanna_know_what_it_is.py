@@ -8,24 +8,24 @@ from solar_rain.virtual_machine_manager import VirtualMachineManager
 from solar_rain.virtual_machine import VirtualMachine
 
 
-def checkOutDefaultValues(n, c, m, d, t, e):
+def check_for_default(name, cpu, ram, disk, type, emulator):
     '''
     This method checks variables for Null and empty values and return default
     instead.
     '''
-    if n is None or n == "":
-        n = "defaultName"
-    if c is None or c == "":
-        c = "1"
-    if m is None or m == "":
-        m = "524288"
-    if d is None or d == "":
-        d = "/dev/sr0"
-    if t is None or t == "":
-        t = "qemu"
-    if e is None or e == "":
-        e = "/usr/bin/kvm"
-    return n, c, m, d, t, e
+    if not name:
+        name = "defaultName"
+    if not cpu:
+        cpu = "1"
+    if not ram:
+        ram = "524288"
+    if not disk:
+        disk = "/dev/sr0"
+    if not type:
+        type = "qemu"
+    if not emulator:
+        emulator = "/usr/bin/kvm"
+    return name, cpu, ram, disk, type, emulator
 
 
 def menu(manager, greetMsg):
@@ -105,7 +105,7 @@ def tryToGetCmdArguments(manager):
         return 0
     if arguments.do == "create":
         try:
-            n, c, m, d, t, e = checkOutDefaultValues(arguments.n,
+            n, c, m, d, t, e = check_for_default(arguments.n,
                                                      arguments.c,
                                                      arguments.m,
                                                      arguments.d,
@@ -188,7 +188,7 @@ def main():
                 t = raw_input("Domain type: ")
                 e = raw_input("Emulator location: ")
                 d = raw_input("Disk location: ")
-                n, c, m, d, t, e = checkOutDefaultValues(n, c, m, d, t, e)
+                n, c, m, d, t, e = check_for_default(n, c, m, d, t, e)
                 manager.create(n, c, m, d, t, e)
             except FailedException as e:
                 print "Fuck it! " + e.message
